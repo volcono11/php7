@@ -1,0 +1,123 @@
+to chnage a contract dates
+
+SELECT * from in_crmhead where jobno='CTR/021/20'
+
+SELECT * from t_activitycenter where jobno='CTR/021/20'
+
+SELECT * from in_incharges where jobno='CTR/021/20'
+
+UPDATE `in_incharges` SET `inchargeto` = '2020-12-31',`inchargefrom` = '2020-12-31' WHERE jobno='CTR/021/20'
+
+
+SELECT * from tbl_projectcontracts where tbl_projectcontracts.contractcode='CTR/021/20'
+
+SELECT * from tbl_projectbuilding where contractcode='CTR/007/20'
+
+update tbl_contractasset set contractfrom='2020-01-01' , contractto='2020-12-31' where contractcode='CTR/021/20'
+
+update tbl_contractassettag set contractfrom='2020-01-01' , contractto='2020-12-31' where contractcode='CTR/021/20'
+
+
+=========================================================
+to check ppm tikmct coungts
+
+select A.tickets,A.jobno,B.jobno,B.tickets from 
+(select count(*) as tickets,jobno from tbl_ticket where doctype='AMC' group by jobno) as A
+right join 
+(select tickets,jobno from t_activitycenter )as B on B.jobno=A.jobno
+==========================================================
+to check  assets and qty same or not in parent and child tables
+ 
+select Aid,Asum,Bid,Bsum  from(
+select tbl_buildingasset.buildingid as Aid,sum(tbl_buildingasset.quantity) as Asum from tbl_buildingasset group by tbl_buildingasset.buildingid) as A,
+(
+select tbl_buildingassettag.buildingid as Bid,count(tbl_buildingassettag.buildingid) as Bsum from tbl_buildingassettag group by tbl_buildingassettag.buildingid
+)as B
+where A.Aid=B.Bid
+
+======================================================================================
+select docno,version,parentdocno,stcheck,createdon,posted,post_to_sp_date,docdate,userid from in_crmhead where enquirycategory='OT Enquiry' 
+
+select jobno,jobtype,status,createdon,siteincharge from t_activitycenter
+
+select docno,version,doctype,if(version = 0, docno,CONCAT(docno,'-V',version)) as Qdocno,docno,docname from in_crmhead where docno='EAMC/00009/2020'
+
+======================================================================================
+select tbl_servicejob.id,tbl_servicejob.invheadid,tbl_servicejob.workdescription,tbl_servicejobline.initemid,tbl_servicejobline.manpowercategory,tbl_servicejobline.designation,tbl_servicejobline.noofmanpower,
+tbl_servicejobline.workunit,tbl_servicejobline.type from tbl_servicejob left join tbl_servicejobline
+on tbl_servicejob.invheadid = tbl_servicejobline.invheadid and tbl_servicejobline.initemid=tbl_servicejob.id
+where tbl_servicejob.invheadid='1494'
+
+select tbl_servicejob.id,tbl_servicejob.invheadid,tbl_servicejob.workdescription,tbl_servicejobline.initemid,tbl_servicejobline.manpowercategory,tbl_servicejobline.designation,tbl_servicejobline.noofmanpower,
+tbl_servicejobline.workunit,tbl_servicejobline.type,tbl_servicejob.formtype,tbl_servicejobline.formtype,
+tbl_servicejobline.material,tbl_servicejobline.materialqty,tbl_servicejobline.materialprice,tbl_servicejob.totalmaterialprice  
+
+from tbl_servicejob left join tbl_servicejobline
+on tbl_servicejob.invheadid = tbl_servicejobline.invheadid and tbl_servicejobline.initemid=tbl_servicejob.id
+where tbl_servicejob.invheadid='1498' order by type
+
+======================================================================================
+
+
+delete from in_crmhead;
+DELETE FROM in_crmline;
+DELETE FROM in_crmvisit;
+DELETE FROM in_incharges;
+DELETE FROM t_activitycenter;
+DELETE FROM tbl_alerts;
+DELETE FROM tbl_clientserviceproperty;
+DELETE FROM tbl_completionreport;
+DELETE FROM tbl_consumables;
+DELETE FROM tbl_email;
+DELETE FROM tbl_manpowerforservice;
+DELETE FROM tbl_message;
+DELETE FROM tbl_serviceasset;
+DELETE FROM tbl_servicejob;
+DELETE FROM tbl_servicejobline;
+DELETE FROM tbl_sms;
+DELETE FROM tbl_ticket;
+
+===================================
+delete from in_crmhead;
+DELETE FROM in_crmline;
+DELETE FROM in_crmservicecategory;
+DELETE FROM in_crmvisit;
+DELETE FROM in_incharges;
+DELETE FROM in_inventoryhead;
+DELETE FROM in_inventoryline;
+DELETE FROM in_ppmschedule;
+DELETE FROM in_project;
+DELETE FROM in_translineannexure;
+DELETE FROM t_activitycenter;
+DELETE FROM tbl_alerts;
+DELETE FROM tbl_building;
+DELETE FROM tbl_buildingasset;
+DELETE FROM tbl_buildingassettag;
+DELETE FROM tbl_clientserviceproperty;
+DELETE FROM tbl_completionreport;
+DELETE FROM tbl_consumables;
+DELETE FROM tbl_contractasset;
+DELETE FROM tbl_contractassettag;
+DELETE FROM tbl_email;
+DELETE FROM tbl_manpowerforservice;
+DELETE FROM tbl_message;
+DELETE FROM tbl_projectbuilding;
+DELETE FROM tbl_projectcontracts;
+DELETE FROM tbl_serviceasset;
+DELETE FROM tbl_servicejob;
+DELETE FROM tbl_servicejobline;
+DELETE FROM tbl_sms;
+DELETE FROM tbl_ticket;
+DELETE FROM tbl_subcontract;
+DELETE FROM tbl_ticket_schedule;
+
+
+
+--------------------------------ppm
+DELETE FROM tbl_prescheduleperiod;
+DELETE FROM tbl_ticket_preschedule;
+DELETE FROM tbl_ticket_schedule;
+DELETE FROM tbl_ticket where doctype='AMC' and ticketcode<>'';
+DELETE FROM in_ppmschedule ;
+DELETE FROM in_ppmscheduleperiod;
+---------------------------------------

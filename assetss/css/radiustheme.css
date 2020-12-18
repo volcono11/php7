@@ -1,0 +1,152 @@
+/* Colour Options Theme */
+
+/* Theme Green */
+.theme-green .page-title{
+	color: #35AA3F !important;
+}
+
+.theme-green .primary-tabs .nav-tabs > li.active { 
+	border-top: 3px solid #35AA3F; 
+}
+
+.theme-green .primary-tabs .nav-tabs > li.active a{
+	color: #35AA3F;
+}
+
+.theme-green .secondary-tabs .nav-tabs > li.active {
+	border-top: 3px solid #35AA3F;
+}
+
+.theme-green .secondary-tabs .nav-tabs > li.active a{
+	color: #35AA3F;
+}
+
+.theme-green .users_group > i,.theme-green .users_group{
+	color: #35AA3F;
+}
+
+
+/* Theme Blue */
+.theme-blue .page-title{
+	color: #3C96D2 !important;
+}
+
+.theme-blue .primary-tabs .nav-tabs > li.active { 
+	border-top: 3px solid #3C96D2; 
+}
+
+.theme-blue .primary-tabs .nav-tabs > li.active a{
+	color: #3C96D2;
+}
+
+.theme-blue .secondary-tabs .nav-tabs > li.active {
+	border-top: 3px solid #3C96D2;
+}
+
+.theme-blue .secondary-tabs .nav-tabs > li.active a{
+	color: #3C96D2;
+}
+
+.theme-blue .users_group > i, .theme-blue .users_group{
+	color: #3C96D2;
+}
+
+/* Theme Red */
+.theme-red .page-title{
+	color: #DE5244 !important;
+}
+
+.theme-red .primary-tabs .nav-tabs > li.active { 
+	border-top: 3px solid #DE5244; 
+}
+
+.theme-red .primary-tabs .nav-tabs > li.active a{
+	color: #DE5244;
+}
+
+.theme-red .secondary-tabs .nav-tabs > li.active {
+	border-top: 3px solid #DE5244;
+}
+
+.theme-red .secondary-tabs .nav-tabs > li.active a{
+	color: #DE5244;
+}
+
+.theme-red .users_group > i, .theme-red .users_group{
+	color: #DE5244;
+}
+
+/* Theme Yellow */
+.theme-yellow .page-title{
+	color: #E5BD1A !important;
+}
+
+.theme-yellow .primary-tabs .nav-tabs > li.active { 
+	border-top: 3px solid #E5BD1A; 
+}
+
+.theme-yellow .primary-tabs .nav-tabs > li.active a{
+	color: #E5BD1A;
+}
+
+.theme-yellow .secondary-tabs .nav-tabs > li.active {
+	border-top: 3px solid #E5BD1A;
+}
+
+.theme-yellow .secondary-tabs .nav-tabs > li.active a{
+	color: #E5BD1A;
+}
+
+.theme-yellow .users_group > i, .theme-yellow .users_group{
+	color: #E5BD1A;
+}
+
+/* Theme Grey */
+.theme-gray .page-title{
+	color: #9D9D9D !important;
+}
+
+.theme-gray .primary-tabs .nav-tabs > li.active { 
+	border-top: 3px solid #9D9D9D; 
+}
+
+.theme-gray .primary-tabs .nav-tabs > li.active a{
+	color: #9D9D9D;
+}
+
+.theme-gray .secondary-tabs .nav-tabs > li.active {
+	border-top: 3px solid #9D9D9D;
+}
+
+.theme-gray .secondary-tabs .nav-tabs > li.active a{
+	color: #9D9D9D;
+}
+
+.theme-gray .users_group > i , .theme-gray .users_group{
+	color: #9D9D9D;
+}
+
+/* Theme Purple */
+.theme-purple .page-title{
+	color: #375c81 !important;
+}
+
+.theme-purple .primary-tabs .nav-tabs > li.active { 
+	border-top: 3px solid #375c81; 
+}
+
+.theme-purple .primary-tabs .nav-tabs > li.active a{
+	color: #375c81;
+}
+
+.theme-purple .secondary-tabs .nav-tabs > li.active {
+	border-top: 3px solid #375c81;
+}
+
+.theme-purple .secondary-tabs .nav-tabs > li.active a{
+	color: #375c81;
+}
+
+.theme-purple .users_group > i , .theme-gray .users_group{
+	color: #375c81;
+}

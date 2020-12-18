@@ -1,0 +1,237 @@
+/***
+Login page
+***/
+.input-icon i {
+	color: #ccc;
+	display: block;
+	position: absolute;
+	margin: 12px 5px 4px 8px;
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+	text-align: center;
+}
+
+/* logo page */
+.login {
+  background-color: #f1f1f1 !important;
+}
+
+.login .logo {
+  margin: 0 auto;   
+  margin-top:60px;
+  padding: 15px;
+  text-align: center;
+}  
+
+
+.login .content {
+  width: 400px;
+  margin: 0 auto; 
+  margin-bottom: 0px;
+  padding: 40px;
+  padding-top: 20px; 
+  padding-bottom: 15px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3),  rgba(86, 43, 121, 1));  
+  background:-moz-linear-gradient(center top , rgba(0, 0, 0, 0.3) , rgba(0, 0, 0, 0.3) );
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0, 0, 0, 0.3)), color-stop(1, rgba(0, 0, 0, 0.3)));
+  border-radius:5% !important;
+}
+
+a.close {
+	display: inline-block;
+	margin-top: 0px;
+	margin-right: 0px;
+	width: 9px;
+	height: 9px;
+	background-repeat: no-repeat !important;
+	outline: none;
+}
+
+.login .content h3 {
+  color: #eee;
+}
+.login .content h4  {
+  color: #eee;
+}
+
+.login .content p,
+.login .content label {
+  color: #FFFFFF;
+}
+
+.login .content .login-form,
+.login .content .forget-form {
+    padding: 0px;
+    margin: 0px;
+}
+
+.login .content .form-control {
+  background-color: #FFFFFF;
+  font-family:"Open Sans", sans-serif;
+  font-size:13px;
+  height:45px;
+}
+
+span.help-block, span.help-block > p{
+	color:#de5244 !important;
+        
+}
+
+.authError{
+    color:#de5244 !important;
+    display: block;
+}
+
+a.login-link{
+	color:#FFFFFF;
+	text-decoration:underline;
+}
+
+a.login-link:hover{
+	color:#D5D5D5;
+}
+
+.login .content .forget-form {
+  display: none;
+}
+
+.login .content .register-form {
+  display: none;
+}
+
+.login .content .form-title {
+  font-weight: 300;
+  margin-bottom: 25px;
+}
+
+.login .content .form-actions {
+  background-color: transparent;
+  clear: both;
+  border: 0px;
+  padding: 0px 30px 5px 30px;
+  margin-left: -30px;
+  margin-right: -30px;
+  margin-top:10px;
+}
+
+.login .content .form-actions .checkbox {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.login .content .forget-form .form-actions {
+  border: 0;
+  margin-bottom: 0;
+  padding-bottom: 20px;
+}  
+
+.login .content .register-form .form-actions {
+  border: 0;
+  margin-bottom: 0;
+  padding-bottom: 0px;
+}
+
+.login .content .form-actions .checkbox {
+  margin-top: 10px;
+  display: inline-block;
+}
+
+
+.login .content .captcha-div{
+	padding: 5px;
+}
+
+.login-button{
+	border-radius:2px !important;
+	-webkit-border-radius: 2px !important;
+	-moz-border-radius: 2px !important;
+	-moz-box-shadow:    1px 1px 0px 0px #CCCCCC !important;
+  	-webkit-box-shadow: 1px 1px 0px 0px #CCCCCC !important;
+  	box-shadow:         1px 1px 0px 0px #CCCCCC !important;
+}
+
+.login .content .forget-password {
+  margin-top: 10px;
+}
+
+.login .content .create-account {
+  border-top: 1px dotted #eee;
+  padding-top: 10px;
+  margin-top: 15px;
+}
+
+.login .content .create-account a {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+/* select2 dropdowns */
+.login .content .select2-container i {
+  display: inline-block;
+  position: relative;
+  color: #ccc;
+  z-index: 1;
+  top:1px;
+  margin: 4px 4px 0px 3px; 
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  text-align: center; 
+}
+
+.login .content .has-error .select2-container i {
+  color: #b94a48;
+}
+
+.login .content .select2-container a span {
+  font-size: 13px;
+}
+
+.login .content .select2-container a span img {
+  margin-left: 4px;
+}
+
+/* footer copyright */
+.login .copyright {
+  text-align: center;
+  margin: 0 auto; 
+  padding: 10px;
+  color: #FFFFFF;
+  font-family:"Raleway", Sans-serif;
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  /***
+  Login page
+  ***/
+  .login .logo {
+    margin-top:10px;
+  }
+
+  .login .content {
+    padding: 30px; 
+    width: 280px;
+  }
+
+  .login .content h3 {
+    font-size: 22px;
+  }
+
+  .login .checkbox {
+    font-size: 13px;
+  }
+}
+
+
+
+
+/*account screen*/
+
+.login-box-bg {
+    height:100vh;
+    background: url('../../images/accounts_bg.jpg?ts=10' ) no-repeat center ; 
+}
+
+/*END Account screen*/

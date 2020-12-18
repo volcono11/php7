@@ -1,0 +1,22 @@
+3.Available options: variable data type note 
+cssSkin string eg. "sDefault", "sSky", "sOrange", "sDark" 
+headerRows integer default is 1 
+fixedCols integer default is 0 
+colWidths array (integers) use -1 for auto sizing ( in the array ) 
+onStart function executed at the start of the script 
+onFinish function executed at the end of the script 
+
+Examples:
+var myST = new superTable("myTableId");
+var myST = new superTable("myTableId", {
+	cssSkin : "sDefault",
+	headerRows : 1,
+	fixedCols : 2,
+	colWidths : [100, 230, 220, -1, 120, -1, -1, 120],
+	onStart : function () {
+		this.start = new Date();
+	},
+	onFinish : function () {
+		alert("Finished... " + ((new Date()) - this.start) + "ms.");
+	}
+});
