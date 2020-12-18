@@ -3,6 +3,7 @@
 //$_SESSION['pr'] = isset($_REQUEST['pr']) ? $_REQUEST['pr'] : '';
 require "connection.php";
 require "pagingObj.php";
+include "functions_workflow.php";
 $WF = new WorkFlow($_SESSION['objectid']);
 $pagerights = $WF->loadPagerights();
 

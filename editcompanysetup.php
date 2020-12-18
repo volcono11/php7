@@ -6,9 +6,7 @@ require "pagingObj.php";
 include "functions_workflow.php";
 //print_r($_REQUEST);
 $WF = new WorkFlow($_SESSION['objectid']);
-$pagerights = $WF->WorkflowPageRights($_REQUEST['ID'],'tbl_companysetup');
-$Action_button = $WF->actionWorkflow($_REQUEST['ID'],'tbl_companysetup');
-
+$pagerights = $WF->loadPagerights();
 $_SESSION['pr'] = isset($pagerights) ? $pagerights : '';
 //echo $_SESSION['pr'];
 $insert = $update = $delete = "false";
@@ -72,7 +70,6 @@ if($_REQUEST['ID'] != "0") {
              $saveid = GetLastSqeID("tbl_companysetup");
              $companynameinarabic = $country = $emirate = $city = $address = $telephone = $fax = $email = $web = $facebook = $instagram = $linkedin = $whatsapp = $molid= $immigrationid= $prefix=  $foldername= $logo1 = $financialyearfrom= $financialyearto= $accountstartsfrom= $currency = $currencyfraction= $currencysymbol= $decimals = $logo1 = $logo2 = $logo3 = $workflowseq = $wfstatus ="";
              $createdby = $_SESSION['SESSuserID'];
-             if($WF->checkWorkflow($_SESSION['objectid'],$_REQUEST['ID'],'tbl_companysetup') == "YES") $workflowseq=1;
 }
 
 if(isset($_REQUEST['dr'])=='view'){
@@ -562,7 +559,6 @@ function editingrecord(action)
                  	<input type='hidden' name='mode' class=textboxcombo id='mode' value='$mode'>
                     <input type='hidden' name='modeid' class=textboxcombo id='modeid' value='save'>
                     <input type='hidden' name='saveid' class=textboxcombo id='saveid' value='$saveid'>
-                    <input type='hidden' name='txt_A_workflowseq' class=textboxcombo id='txt_A_workflowseq' value='$workflowseq'>
                     <input type='hidden' name='txt_A_createdby' class=textboxcombo id='txt_A_createdby' value='$createdby'>
 
             </table>
@@ -581,7 +577,6 @@ function editingrecord(action)
                         $entrydata.="   <button class='btn btn-warning inputs' style='margin-top:-5px;' name='btnwarning' type='button'  onclick ='javascript:editingrecord(\"saveclose\");'>Save & Close &nbsp;<i class='fa fa-save' aria-hidden='true'></i>&nbsp;&nbsp;<i class='fa fa-close' aria-hidden='true'></i></button>";
                         $entrydata.="  <button class='btn btn-danger inputs' style='margin-top:-5px;' name='btndanger' type='button'  onclick ='javascript:closeediting(\"companysetup.php?ps=1&objectid=".$_SESSION['objectid']."\");'>Close &nbsp;<i class='fa fa-close' aria-hidden='true'></i></button>";
                         $entrydata.="  <button class='btn btn-primary inputs' style='margin-top:-5px;' name='btnprimary' type='button'  onclick ='javascript:closeediting(\"companysetup.php?ps=1&objectid=".$_SESSION['objectid']."&frmPage_rowcount=".$_SESSION['frmPage_rowcount']."&txtsearch=".$_SESSION['txtsearch']."&frmPage_startrow=".$_SESSION['frmPage_startrow']."\");'>Back &nbsp;<i class='fa fa-backward' aria-hidden='true'></i></button>";
-                        $entrydata.= $Action_button;
                         $entrydata.=" </div>";
 ;
                         $entrydata.="  </form> ";

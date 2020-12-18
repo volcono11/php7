@@ -6,8 +6,7 @@ require "pagingObj.php";
 include "functions_workflow.php";
 //print_r($_REQUEST);
 $WF = new WorkFlow($_SESSION['objectid']);
-$pagerights = $WF->WorkflowPageRights($_REQUEST['ID'],'tbl_companysetup');
-$Action_button = $WF->actionWorkflow($_REQUEST['ID'],'tbl_companysetup');
+$pagerights = $WF->loadPagerights();
 
 $_SESSION['pr'] = isset($pagerights) ? $pagerights : '';
 
