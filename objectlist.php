@@ -4,13 +4,11 @@ require "connection.php";
 require "pagingObj.php";
 include "functions_workflow.php";
 
-//$_SESSION['pr'] = isset($_REQUEST['pr']) ? $_REQUEST['pr'] : '';
 $_SESSION['objectid'] = isset($_REQUEST['objectid']) ? $_REQUEST['objectid'] : '';
 
 $WF = new WorkFlow($_SESSION['objectid']);
 $pagerights = $WF->loadPagerights();
 $_SESSION['pr'] = isset($pagerights) ? $pagerights : '';
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
@@ -158,9 +156,9 @@ while($d_arr = mysqli_fetch_array($d_res)){
 		
 		$frmPage_startrow = isset($_REQUEST['frmPage_startrow']) ? $_REQUEST['frmPage_startrow'] : '';
 		if($frmPage_startrow>1){
-			$_SESSION["frmPage_rowcount"]=$frmPage_startrow;
+			$_SESSION["frmPage_startrow"]=$frmPage_startrow;
 		}else{
-			$_SESSION["frmPage_rowcount"]="0";
+			$_SESSION["frmPage_startrow"]="0";
 		}
 		
 		$_SESSION['lookcode'] = isset($_REQUEST['cmb_objectlist']) ? $_REQUEST['cmb_objectlist'] : '';

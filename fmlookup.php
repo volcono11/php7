@@ -36,11 +36,11 @@ $frmPage_startrow = isset($_REQUEST['frmPage_startrow']) ? $_REQUEST['frmPage_st
 
 
 $grid = new MyPHPGrid('frmPage');
-$grid->formName = "newlookup.php";
+$grid->formName = "fmlookup.php";
 $grid->inpage = $frmPage_startrow;
-$grid->TableName = "in_lookup";
+$grid->TableName = "in_lookup_fmcrm";
 $grid->SyncSession($grid);
-$formlistname="newlookup.php";
+$formlistname="fmlookup.php";
 
 
 $selected1 =$selected2 = $selected3 =$selected4 =$selected5 = '';
@@ -54,14 +54,14 @@ if($frmPage_rowcount=="50") $selected5 ="selected='selected'";
 
 if($CHILDID !='' && isset($_REQUEST['DEL']) =='DELETE'){
 
-     $Del_query="delete from in_lookup where id='". $CHILDID."'";
+     $Del_query="delete from in_lookup_fmcrm where id='". $CHILDID."'";
      $Del_Result = mysqli_query($con,$Del_query)   or die(mysqli_error()."<br>".$Del_query);
      $_REQUEST['CHILDID']="";
 
 }
 /*if($_REQUEST['CHILDID'] !='' && $_REQUEST['DEL'] =='POST'){
 
-     $Del_query="update in_lookup set posted='YES' where id='". $_REQUEST['CHILDID']."'";
+     $Del_query="update in_lookup_fmcrm set posted='YES' where id='". $_REQUEST['CHILDID']."'";
      $Del_Result = mysqli_query($con,$Del_query)   or die(mysqli_error()."<br>".$Del_query);
      $_REQUEST['CHILDID']="";
 
@@ -86,7 +86,7 @@ if($mysearch!=""){
 }else{
     $addsql="";
 }
-$query = "SELECT * from in_lookup where lookname = 'XX' $addsql  order by id DESC LIMIT $start_from, $record_per_page";
+$query = "SELECT * from in_lookup_fmcrm where lookname = 'XX' $addsql  order by id DESC LIMIT $start_from, $record_per_page";
 $result = mysqli_query($con,$query);
 
 ?>
@@ -164,7 +164,7 @@ function Additem(){
 </script>
 <body>
 <section class='content-header' style='margin-top:5px;'>
-<h2 class='title'>LOOKUP</h2>
+<h2 class='title'>FM LOOKUP</h2>
 </section>
 <?php
 $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
@@ -211,7 +211,7 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
                              </tr>
                              ";
          if($CHILDID==''){
-                  $SQL   = "SELECT max(id) as id FROM in_lookup";
+                  $SQL   = "SELECT max(id) as id FROM in_lookup_fmcrm";
                   $SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
                   if(mysqli_num_rows($SQLRes)>=1){
                        $loginResultArray   = mysqli_fetch_array($SQLRes);
@@ -235,7 +235,7 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
                              <input type='hidden' name='modeid' class=textboxcombo id='modeid' value='save'> </thead>
                              <tbody>";
 
-    $page_query = "SELECT * from in_lookup where lookname = 'XX' ORDER BY id DESC";
+    $page_query = "SELECT * from in_lookup_fmcrm where lookname = 'XX' ORDER BY id DESC";
     $page_result = mysqli_query($con,$page_query);
     $total_rows = mysqli_num_rows($page_result);
     $total_rows=$total_rows-(($page-1)*$record_per_page);
@@ -298,8 +298,8 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
     $end_loop = $start_loop + 4;
     if($page > 1)
     {
-     echo "<a  href='newlookup.php?pr=$pr&page=1' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >First</a>";
-     echo "<a href='newlookup.php?pr=$pr&page=".($page - 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><<</a>";
+     echo "<a  href='fmlookup.php?pr=$pr&page=1' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >First</a>";
+     echo "<a href='fmlookup.php?pr=$pr&page=".($page - 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><<</a>";
     }
     for($i=$page; $i<=$end_loop; $i++)
     {
@@ -310,13 +310,13 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
        $x=" style='padding:8px 16px;border:1px solid #ccc;color:#333;'";
        $font="#000";
      }
-     echo "<a $x href='newlookup.php?pr=$pr&page=".$i."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><font style='font-size: 13px;color:$font'>".$i."</font></a>";
+     echo "<a $x href='fmlookup.php?pr=$pr&page=".$i."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><font style='font-size: 13px;color:$font'>".$i."</font></a>";
     }
    // echo $page."/".$end_loop;
     if($page <= $end_loop)
     {
-     echo "<a href='newlookup.php?pr=$pr&page=".($page + 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >>></a>";
-     echo "<a href='newlookup.php?pr=$pr&page=".$total_pages."'style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >Last</a>";
+     echo "<a href='fmlookup.php?pr=$pr&page=".($page + 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >>></a>";
+     echo "<a href='fmlookup.php?pr=$pr&page=".$total_pages."'style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >Last</a>";
     }
    }
     echo "<n>Result of ".$start_from."-".$record_per_page." of total ".$total_records." Records</n></div>";
@@ -385,19 +385,19 @@ function newrecord(){
 }
 function refreshrecord(){
            var childid='';
-           document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&CHILDID='+childid+'&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookup.php?pr=<?php echo $pr;?>&CHILDID='+childid+'&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
            document.frmEdit.submit();
 }
 function updaterecord(childid){
 
-    document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+    document.frmEdit.action='fmlookup.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&CHILDID='+childid+'&page='+<?php echo $page; ?>;
    document.frmEdit.submit();
 }
 function deleterecord(childid){
 
         alertify.confirm("Are you sure you want to delete ?", function (e) {
          if (e) {
-           document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&DEL=DELETE&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookup.php?pr=<?php echo $pr;?>&DEL=DELETE&CHILDID='+childid+'&page='+<?php echo $page; ?>;
            alertify.error("Record Deleted");
            window.setTimeout(function() { document.frmEdit.submit(); }, 800);
          } else {
@@ -410,7 +410,7 @@ function postrecord(childid){
 
         alertify.confirm("Are you sure you want to Post ?", function (e) {
          if (e) {
-           document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&DEL=POST&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookup.php?pr=<?php echo $pr;?>&DEL=POST&CHILDID='+childid+'&page='+<?php echo $page; ?>;
            alertify.alert("Record Posted");
            window.setTimeout(function() { document.frmEdit.submit(); }, 800);
          } else {
@@ -465,12 +465,12 @@ function editingrecord(){
                                var s3 = "Record Updated";
                                if(s1.toString() == s2.toString()){
                                 alertify.success("Record Saved");
-                                 document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&page='+<?php echo $page; ?>;
+                                 document.frmEdit.action='fmlookup.php?pr=<?php echo $pr;?>&page='+<?php echo $page; ?>;
                                  window.setTimeout(function() { document.frmEdit.submit(); }, 800);
 
                                }else if(s1.toString() == s3.toString()){
                                 alertify.success("Record Updated");
-                                document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&dr=edit&ID='+document.getElementById('mode').value+'&page='+<?php echo $page; ?>;
+                                document.frmEdit.action='fmlookup.php?pr=<?php echo $pr;?>&dr=edit&ID='+document.getElementById('mode').value+'&page='+<?php echo $page; ?>;
                                 window.setTimeout(function() { document.frmEdit.submit(); }, 800);
                                }else{
                                 alertify.error(s1);
@@ -509,7 +509,7 @@ function filtersublist(objEvent){
                            iKeyCode = objEvent.which;
                      }
                      if (iKeyCode==13) {
-                         window.location.href='newlookup.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
+                         window.location.href='fmlookup.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
                          return false;
                      }
 }

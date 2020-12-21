@@ -3,17 +3,14 @@ session_start();
 require "connection.php";
 require "pagingObj.php";
 include "functions_workflow.php";
-/*if($_REQUEST['ps'] == "1") {
-  $_REQUEST['cmb_A_projectstore'] = "";
-}*/
 $_SESSION['objectid'] = isset($_REQUEST['objectid']) ? $_REQUEST['objectid'] : '';
 $WF = new WorkFlow($_SESSION['objectid']);
 $pagerights = $WF->loadPagerights();
 
 $_SESSION['pr'] = isset($pagerights) ? $pagerights : '';
-
-//$_SESSION['pr'] = isset($_REQUEST['pr']) ? $_REQUEST['pr'] : '';
 $pr = $_SESSION['pr'];
+
+$_SESSION['lookcode'] = isset($_REQUEST['looktype']) ? $_REQUEST['looktype'] : '';
 
 $insert = $update = $delete = "false";
 
@@ -36,11 +33,11 @@ $frmPage_startrow = isset($_REQUEST['frmPage_startrow']) ? $_REQUEST['frmPage_st
 
 
 $grid = new MyPHPGrid('frmPage');
-$grid->formName = "newlookup.php";
+$grid->formName = "fmlookuplist.php";
 $grid->inpage = $frmPage_startrow;
-$grid->TableName = "in_lookup";
+$grid->TableName = "in_lookup_fmcrm";
 $grid->SyncSession($grid);
-$formlistname="newlookup.php";
+$formlistname="fmlookuplist.php";
 
 
 $selected1 =$selected2 = $selected3 =$selected4 =$selected5 = '';
@@ -54,14 +51,14 @@ if($frmPage_rowcount=="50") $selected5 ="selected='selected'";
 
 if($CHILDID !='' && isset($_REQUEST['DEL']) =='DELETE'){
 
-     $Del_query="delete from in_lookup where id='". $CHILDID."'";
+     $Del_query="delete from in_lookup_fmcrm where id='". $CHILDID."'";
      $Del_Result = mysqli_query($con,$Del_query)   or die(mysqli_error()."<br>".$Del_query);
      $_REQUEST['CHILDID']="";
 
 }
 /*if($_REQUEST['CHILDID'] !='' && $_REQUEST['DEL'] =='POST'){
 
-     $Del_query="update in_lookup set posted='YES' where id='". $_REQUEST['CHILDID']."'";
+     $Del_query="update in_lookup_fmcrm set posted='YES' where id='". $_REQUEST['CHILDID']."'";
      $Del_Result = mysqli_query($con,$Del_query)   or die(mysqli_error()."<br>".$Del_query);
      $_REQUEST['CHILDID']="";
 
@@ -81,12 +78,16 @@ if(isset($_REQUEST["page"])!=''){
 $start_from = ($page-1)*$record_per_page;
 if($mysearch!=""){
     $addsql = " and (";
-    $addsql .= "  looktype like '%".$mysearch."%'";
+    $addsql .= "  lookname like '%".$mysearch."%'";
     $addsql .= ")";
 }else{
     $addsql="";
 }
-$query = "SELECT * from in_lookup where lookname = 'XX' $addsql  order by id DESC LIMIT $start_from, $record_per_page";
+
+if($_SESSION['lookcode']!=""){
+	$addsql.=" and looktype='".$_SESSION['lookcode']."'";
+}
+$query = "SELECT * from in_lookup_fmcrm where lookname <> 'XX' $addsql  order by id DESC LIMIT $start_from, $record_per_page";
 $result = mysqli_query($con,$query);
 
 ?>
@@ -164,7 +165,7 @@ function Additem(){
 </script>
 <body>
 <section class='content-header' style='margin-top:5px;'>
-<h2 class='title'>LOOKUP</h2>
+<h2 class='title'>LOOKUP VALUES</h2>
 </section>
 <?php
 $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
@@ -174,8 +175,9 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
                              <table class='table table-condensed ' style='margin-top:3px;' border='0'>
 
                                              <tr>
-
-                                             <td align='left' width='70%'><a href ='javascript:Additem();'  border='0' ><div id='addimg' name='addimg' style='display:none;'><img src='ico/add-1-icon.png'  title='New Entry' width='20' height='20'></div></a></td>
+                                             <td width='40%'>".GetGroup($_SESSION['lookcode'])."</td>
+                                             <td align='left' width='40%'><a href ='javascript:Additem();'  border='0' ><div id='addimg' name='addimg' style='display:none;'><img src='ico/add-1-icon.png'  title='New Entry' width='20' height='20'></div></a></td>
+                                                
                                                 <td  width='25%'>
                                                       <div class='input-group input-group-sm pull-right'>
                                                                   <input type='text' style='padding-left:5px;padding-right:5px;margin-top0px;height:30px;' onkeypress='return filtersublist(event);' name='mysearch' id=mysearch class='form-control pull-right' value='".$mysearch."' placeholder='Search..'>
@@ -211,31 +213,43 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
                              </tr>
                              ";
          if($CHILDID==''){
-                  $SQL   = "SELECT max(id) as id FROM in_lookup";
-                  $SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
-                  if(mysqli_num_rows($SQLRes)>=1){
-                       $loginResultArray   = mysqli_fetch_array($SQLRes);
-                       $categorycode = $loginResultArray['id']+1;
+         	$looktype= $_SESSION['lookcode'];
+                 $SQL = " Select lookcode from in_lookup_fmcrm where looktype='".$looktype."' and lookname='XX'";
+	             $SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
+	             while($loginResultArray   = mysqli_fetch_array($SQLRes)){
+	                   $looktypeid =$loginResultArray['lookcode'];
+	             }
+	             
+                 
+             	$SQL = " Select lookcode from in_lookup_fmcrm where looktype='".$looktype."' and lookname='XX'";
+             	$SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
+             	while($loginResultArray   = mysqli_fetch_array($SQLRes)){
+                   $looktypeid =$loginResultArray['lookcode'];
+             	}
+               $lookcode ="";
+               if($looktype!="")
+               $lookcode =GetLastSqeIDlookcode('lookcode',$looktype,$looktypeid);
+               
                  }
 
-            if($insert == "true")  //add new   
+            if($insert == "true" && $_SESSION['lookcode']!="" && $CHILDID=="")  //add new   
             $entrydata .= " <tr id='tradd' name='tradd'>
-                             <td style='border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' disabled id='txt_A_lookcode' name='txt_A_lookcode' onkeypress='return AllowNumeric1(event)'  value='$categorycode'/></td>
-                             <td style='border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' id='txt_A_looktype' name='txt_A_looktype'  value='' style='text-transform:uppercase'/></td>
+                             <td style='border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' disabled id='txt_A_lookcode' name='txt_A_lookcode' onkeypress='return AllowNumeric1(event)'  value='$lookcode'/></td>
+                             <td style='border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' id='txt_A_lookname' name='txt_A_lookname'  value='' /></td>
                              <td style='border: 1px solid #ccc;'> <a href ='javascript:editingrecord();'  border='0' ><img src='ico/add-1-icon.png' title='New Entry' width='20' height='20'></a>&nbsp;
                              &nbsp;&nbsp;&nbsp;&nbsp;<a href ='javascript:Hideitem();'  border='0' ><img src='ico/cancel.png' title='Save Entry' width='18' height='18'></a>
                              </td>
                              </tr>";
-         }
+         //}
 
 
        $entrydata .= "  </thead>
-                             <input type='hidden' name='txt_A_lookname' id='txt_A_lookname' class=textboxcombo value='XX'>
+                             <input type='hidden' name='txt_A_looktype' id='txt_A_looktype' class=textboxcombo value='".$_SESSION['lookcode']."'>
                              <input type='hidden' name='mode' class=textboxcombo id='mode' value='".$CHILDID."'>
                              <input type='hidden' name='modeid' class=textboxcombo id='modeid' value='save'> </thead>
                              <tbody>";
 
-    $page_query = "SELECT * from in_lookup where lookname = 'XX' ORDER BY id DESC";
+    $page_query = "SELECT * from in_lookup_fmcrm where lookname <> 'XX' $addsql ORDER BY id DESC";
     $page_result = mysqli_query($con,$page_query);
     $total_rows = mysqli_num_rows($page_result);
     $total_rows=$total_rows-(($page-1)*$record_per_page);
@@ -246,7 +260,7 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
        if($row['id']==$CHILDID){
         $colorbg ="#F2F2F2";
         $entrydata .= "<tr><td style='background-color:$colorbg;border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' disabled id='txt_A_lookcode' name='txt_A_lookcode' value='".$row['lookcode']."'/></td>
-                       <td style='background-color:$colorbg;border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' id='txt_A_looktype' name='txt_A_looktype' value='".$row['looktype']."' style='text-transform:uppercase'/></td>
+                       <td style='background-color:$colorbg;border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' id='txt_A_lookname' name='txt_A_lookname' value='".$row['lookname']."' /></td>
                        <td style='border: 1px solid #ccc;'>
                             <a href ='javascript:editingrecord();'  border='0' ><img src='ico/save.png' border='0' title='Update Record' width='18' height='18'></a>&nbsp;&nbsp;&nbsp;
                              <a href ='javascript:refreshrecord();'  border='0' ><img src='ico/back.png' border='0' title='Cancel Editing' width='18' height='18'></a>
@@ -261,7 +275,7 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
        $entrydata .="<tr id='tr_".$row['id']."'  name='tr_".$row['id']."'>
 
                       <td style='background-color:$colorbg;border:1px #D2D2D2 solid;'><font>&nbsp;&nbsp;&nbsp;&nbsp;".$row["lookcode"]."</font></td>
-                      <td style='background-color:$colorbg;border:1px #D2D2D2 solid;'><font>&nbsp;&nbsp;&nbsp;&nbsp;".$row["looktype"]."</font></td>";
+                      <td style='background-color:$colorbg;border:1px #D2D2D2 solid;'><font>&nbsp;&nbsp;&nbsp;&nbsp;".$row["lookname"]."</font></td>";
 
 
        $entrydata .= "<td style='background-color:$colorbg;border: 1px solid #ccc;'>";
@@ -298,8 +312,8 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
     $end_loop = $start_loop + 4;
     if($page > 1)
     {
-     echo "<a  href='newlookup.php?pr=$pr&page=1' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >First</a>";
-     echo "<a href='newlookup.php?pr=$pr&page=".($page - 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><<</a>";
+     echo "<a  href='fmlookuplist.php?pr=$pr&page=1' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >First</a>";
+     echo "<a href='fmlookuplist.php?pr=$pr&page=".($page - 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><<</a>";
     }
     for($i=$page; $i<=$end_loop; $i++)
     {
@@ -310,13 +324,13 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
        $x=" style='padding:8px 16px;border:1px solid #ccc;color:#333;'";
        $font="#000";
      }
-     echo "<a $x href='newlookup.php?pr=$pr&page=".$i."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><font style='font-size: 13px;color:$font'>".$i."</font></a>";
+     echo "<a $x href='fmlookuplist.php?pr=$pr&page=".$i."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   ><font style='font-size: 13px;color:$font'>".$i."</font></a>";
     }
    // echo $page."/".$end_loop;
     if($page <= $end_loop)
     {
-     echo "<a href='newlookup.php?pr=$pr&page=".($page + 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >>></a>";
-     echo "<a href='newlookup.php?pr=$pr&page=".$total_pages."'style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >Last</a>";
+     echo "<a href='fmlookuplist.php?pr=$pr&page=".($page + 1)."' style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >>></a>";
+     echo "<a href='fmlookuplist.php?pr=$pr&page=".$total_pages."'style='padding:8px 16px;border:1px solid #ccc;color:#333;'   >Last</a>";
     }
    }
     echo "<n>Result of ".$start_from."-".$record_per_page." of total ".$total_records." Records</n></div>";
@@ -385,19 +399,19 @@ function newrecord(){
 }
 function refreshrecord(){
            var childid='';
-           document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&CHILDID='+childid+'&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&CHILDID='+childid+'&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
            document.frmEdit.submit();
 }
 function updaterecord(childid){
-
-    document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+	//document.getElementById('tradd').style.display = 'none'; 
+    document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&CHILDID='+childid+'&page='+<?php echo $page; ?>;
    document.frmEdit.submit();
 }
 function deleterecord(childid){
 
         alertify.confirm("Are you sure you want to delete ?", function (e) {
          if (e) {
-           document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&DEL=DELETE&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&DEL=DELETE&CHILDID='+childid+'&page='+<?php echo $page; ?>;
            alertify.error("Record Deleted");
            window.setTimeout(function() { document.frmEdit.submit(); }, 800);
          } else {
@@ -410,7 +424,7 @@ function postrecord(childid){
 
         alertify.confirm("Are you sure you want to Post ?", function (e) {
          if (e) {
-           document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&DEL=POST&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&DEL=POST&CHILDID='+childid+'&page='+<?php echo $page; ?>;
            alertify.alert("Record Posted");
            window.setTimeout(function() { document.frmEdit.submit(); }, 800);
          } else {
@@ -430,9 +444,9 @@ function editingrecord(){
           });
              return;
           }
-          else{
+          /*else{
 		  	txt_A_looktype.value = txt_A_looktype.value.toUpperCase();
-		  }
+		  }*/
        }
 
        var parameter =get(document.frmEdit);
@@ -465,12 +479,12 @@ function editingrecord(){
                                var s3 = "Record Updated";
                                if(s1.toString() == s2.toString()){
                                 alertify.success("Record Saved");
-                                 document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&page='+<?php echo $page; ?>;
+                                 document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&page='+<?php echo $page; ?>;
                                  window.setTimeout(function() { document.frmEdit.submit(); }, 800);
 
                                }else if(s1.toString() == s3.toString()){
                                 alertify.success("Record Updated");
-                                document.frmEdit.action='newlookup.php?pr=<?php echo $pr;?>&dr=edit&ID='+document.getElementById('mode').value+'&page='+<?php echo $page; ?>;
+                                document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&dr=edit&ID='+document.getElementById('mode').value+'&page='+<?php echo $page; ?>;
                                 window.setTimeout(function() { document.frmEdit.submit(); }, 800);
                                }else{
                                 alertify.error(s1);
@@ -509,7 +523,7 @@ function filtersublist(objEvent){
                            iKeyCode = objEvent.which;
                      }
                      if (iKeyCode==13) {
-                         window.location.href='newlookup.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
+                         window.location.href='fmlookuplist.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
                          return false;
                      }
 }
@@ -541,3 +555,44 @@ function getlookcode(catname){
                 }
 
 </script>
+<?php
+function GetGroup($lookcode){ 
+	global $con;
+         $CMB = "<span style='margin-top:5px;float:left'>Select Group :&nbsp;&nbsp;</span>";
+         $CMB .= "<select name='looktype' class='form-control select' id='looktype' style='padding-left:5px;padding-right:5px;margin-top:1px;width:50%;'  onchange='javascript:refreshrecord();'>";
+         $CMB .= "<option value=''>Select</option>";
+         $SEL =  "select lookcode,looktype from in_lookup_fmcrm where lookname='XX' order by looktype";
+         $RES = mysqli_query($con,$SEL);
+         while ($ARR = mysqli_fetch_array($RES)) {
+                $SEL = "";
+                if(strtoupper($lookcode) == strtoupper($ARR['looktype'])){ $SEL =  "SELECTED";}
+                $CMB .= "<option value='".$ARR['looktype']."' $SEL >".$ARR['looktype']."</option>";
+         }
+         $CMB .= "</select>";
+         return $CMB;
+
+}
+
+function GetLastSqeIDlookcode($tblName,$looktype,$looktypeid){
+	global $con;
+
+                  $SQL = "Select id,lookcode from in_lookup_fmcrm WHERE looktype='".$looktype."' and lookname<>'XX'";
+                  $SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
+                  if(mysqli_num_rows($SQLRes)==0){
+                       $loginResultArray   = mysqli_fetch_array($SQLRes);
+                       $loginResultArray['lookcode'];
+                       $catgencode = $looktypeid."001";
+                  }else{
+                        $SQL1 = "Select max(lookcode) as count from in_lookup_fmcrm WHERE looktype='".$looktype."' and lookname<>'XX'";
+                        $SQLRes1 =  mysqli_query($con,$SQL1) or die(mysqli_error()."<br>".$SQL1);
+                        if(mysqli_num_rows($SQLRes1)>=1){
+                           while($loginResultArray1   = mysqli_fetch_array($SQLRes1)){
+                             $catgencode = $loginResultArray1['count']+1;
+                           }
+                        }
+                  }
+
+
+                  return $catgencode;
+}
+?>

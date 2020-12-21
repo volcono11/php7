@@ -1,8 +1,13 @@
 <?php
 @session_start();
-//$_SESSION['pr'] = isset($_REQUEST['pr']) ? $_REQUEST['pr'] : '';
 require "connection.php";
 require "pagingObj.php";
+include "functions_workflow.php";
+$WF = new WorkFlow($_SESSION['objectid']);
+$pagerights = $WF->loadPagerights();
+$_SESSION['pr'] = isset($pagerights) ? $pagerights : '';
+//echo $_SESSION['pr'];
+$insert = $update = $delete = "false";
 $insert = $update = $delete = "false";
 
 $grid = new MyPHPGrid('frmPage');
@@ -363,7 +368,7 @@ function editingrecord(action)
 
          <section class="content-header">
 
-                 <a class="pull-left" href="objectlist.php?ps=1&pr=<?php echo $_SESSION['pr'];?>" data-toggle="tooltip" data-placement="right" title="Back to Company Setup"><i class='fa fa-backward'></i></a>
+                 <a class="pull-left" href="objectlist.php?objectid=<?php echo $_SESSION['objectid']; ?>&txtsearch=<?php echo $_SESSION['txtsearch']; ?>" data-toggle="tooltip" data-placement="right" title="Back to Company Setup"><i class='fa fa-backward'></i></a>
                  <h2 class="title">&nbsp;&nbsp;<?php echo $title; ?></h2>
 
                  <!--<ol class='breadcrumb'>
@@ -447,8 +452,9 @@ function editingrecord(action)
                        $entrydata.="  <button class='btn btn-info inputs' style='margin-top:-5px;' name='btninfo' type='button' onclick ='javascript:editingrecord(\"savenew\");'>Save & New &nbsp; <i class='fa fa-save' aria-hidden='true'></i>&nbsp;&nbsp;<i class='fa fa-plus' aria-hidden='true'></i></button>";
                        if($update == "true" || $insert=="true")
                         $entrydata.="   <button class='btn btn-warning inputs' style='margin-top:-5px;' name='btnwarning' type='button'  onclick ='javascript:editingrecord(\"saveclose\");'>Save & Close &nbsp;<i class='fa fa-save' aria-hidden='true'></i>&nbsp;&nbsp;<i class='fa fa-close' aria-hidden='true'></i></button>";
-                        $entrydata.="  <button class='btn btn-danger inputs' style='margin-top:-5px;' name='btndanger' type='button'  onclick ='javascript:closeediting(\"objectlist.php?ps=1&pr=".$_SESSION['pr']."\");'>Close &nbsp;<i class='fa fa-close' aria-hidden='true'></i></button>
-                                        </div>";
+                        $entrydata.="  <button class='btn btn-danger inputs' style='margin-top:-5px;' name='btndanger' type='button'  onclick ='javascript:closeediting(\"objectlist.php?ps=1&objectid=".$_SESSION['objectid']."\");'>Close &nbsp;<i class='fa fa-close' aria-hidden='true'></i></button>";
+                        $entrydata.="  <button class='btn btn-primary inputs' style='margin-top:-5px;' name='btndanger' type='button'  onclick ='javascript:closeediting(\"objectlist.php?ps=1&objectid=".$_SESSION['objectid']."&frmPage_rowcount=".$_SESSION['frmPage_rowcount']."&txtsearch=".$_SESSION['txtsearch']."&frmPage_startrow=".$_SESSION['frmPage_startrow']."\");'>Back &nbsp;<i class='fa fa-backward' aria-hidden='true'></i></button>";
+                         $entrydata.=" </div>";
                         $entrydata.= "</form>  ";
 echo  $entrydata;
 ?>

@@ -55,7 +55,7 @@ function refreshPaging(formObj){
         document.frmPage.frmPage_rowcount.value = 10;
 	
 	
-        document.frmPage.action=formObj+'?ID='+'';
+        document.frmPage.action=formObj+'?objectid='+document.frmPage.frmPage_objectid.value+'&ID='+'';
         document.frmPage.submit();
 }
 function refreshPagingCount(formObj){
@@ -79,7 +79,7 @@ function searchPaging(formObj){
         document.frmPage.frmPage_currentpage.value = 1;
         document.frmPage.frmPage_endpage.value = 10;
         document.frmPage.frmPage_rowcount.value = 10;
-        document.frmPage.action=formObj+'?txtsearch'+document.frmPage.txtsearch.value+'&ID='+'';
+        document.frmPage.action=formObj+'?txtsearch='+document.frmPage.txtsearch.value+'&objectid='+document.frmPage.frmPage_objectid.value+'&ID='+'';
         document.frmPage.submit();
 }
 

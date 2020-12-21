@@ -295,8 +295,8 @@ class MyPHPGrid
                                                                   <input type='text' name='txtsearch' id=txtsearch class='form-control pull-right' value='".$txtsearch."' placeholder='Search..'>
 
                                                                   <div class='input-group-btn'>
-                                                                    <button type='submit' class='btn btn-default' onclick='javascript:searchPaging(\"".$formlistname."?pr=".$_SESSION['pr']."\");'><i class='fa fa-search'></i></button>
-                                                                    <button type='submit' class='btn btn-default' onclick='javascript:refreshPaging(\"".$formlistname."?pr=".$_SESSION['pr']."\");'><i class='fa fa-refresh'></i></button>
+                                                                    <button type='submit' class='btn btn-default' onclick='javascript:searchPaging(\"".$formlistname."\");'><i class='fa fa-search'></i></button>
+                                                                    <button type='submit' class='btn btn-default' onclick='javascript:refreshPaging(\"".$formlistname."\");'><i class='fa fa-refresh'></i></button>
                                                                   </div>
 
                                                       </div>
@@ -312,13 +312,14 @@ class MyPHPGrid
                                                                         <input id='$this->_currentpage' name='$this->_currentpage' type='hidden' value='$this->currentpage' />
                                                                         <input id='$this->_endpage' name='$this->_endpage' type='hidden' value='$this->endpage' />
                                                                         <input id='frmPage_rowcount' name='frmPage_rowcount' type='hidden' value='".$frmPage_rowcount."' />
+                                                                        <input id='frmPage_objectid' name='frmPage_objectid' type='hidden' value='".$_SESSION['objectid']."' />
                                                                         <span style='float:left;padding-top:4px;'>Show </span>
 
 
                                                 </td>
                                                 <td>
 
-                                                                        <select name='frmPage_rowcount' id='frmPage_rowcount' class='form-control' style='padding-left:5px;padding-right:5px;margin-top:-1px;width:50px;' onchange='javascript:document.frmPage.action=\"$formlistname?pr=".$_SESSION['pr']."\";document.frmPage.submit();' >
+                                                                        <select name='frmPage_rowcount' id='frmPage_rowcount' class='form-control' style='padding-left:5px;padding-right:5px;margin-top:-1px;width:50px;' onchange='javascript:document.frmPage.action=\"$formlistname?objectid=".$_SESSION['objectid']."\";document.frmPage.submit();' >
                                                                         <option  $selected1 value='15'>15</option>
                                                                         <option  $selected2 value='30'>30</option>
                                                                         <option  $selected3 value='45'>45</option>
@@ -467,7 +468,7 @@ class MyPHPGrid
                                                                  echo "</td>";*/
                                                                  $delete_li = "";
                                                                  if($buttons["delete"]=="true"){
-                          	 $delete_li = " <li><a href='javascript:deleterecord_single(\"".$formlistname."?pr=".$_SESSION['pr']."\",\"".$row['id']."\");'><i class='fa fa-trash'></i>Delete</a></li>";
+                          	 $delete_li = " <li><a href='javascript:deleterecord_single(\"".$formlistname."?objectid=".$_SESSION['objectid']."\",\"".$row['id']."\");'><i class='fa fa-trash'></i>Delete</a></li>";
 																 }
                                                                  echo "<td style='width:3%;border:1px #D2D2D2 solid;' align='center'>";
                                                                  echo '<div class="dropdown">
@@ -623,7 +624,7 @@ class MyPHPGrid
 
                         echo "<li><a href='#' onclick='javascript:document.$this->name.$this->_startrow.value=\"$start\";
                                         document.$this->name.$this->_startpage.value=\"$fstartpage\";document.$this->name.$this->_currentpage.value=\"$fcurrentpage\";
-                                        document.$this->name.$this->_endpage.value=\"$fendpage\";document.frmPage.action=\"$formlistname?pr=".$_SESSION['pr']."\";document.$this->name.submit();'><span aria-hidden='true'>&laquo;</span></a></li>";
+                                        document.$this->name.$this->_endpage.value=\"$fendpage\";document.frmPage.action=\"$formlistname?objectid=".$_SESSION['objectid']."\";document.$this->name.submit();'><span aria-hidden='true'>&laquo;</span></a></li>";
                 }
                 echo "</ul>";
 
@@ -664,12 +665,12 @@ class MyPHPGrid
                         if($startfrom==$pagenumber){
                           echo "<li class='$class'><a href='#' onclick='javascript:document.$this->name.$this->_startrow.value=\"$start\";
                                         document.$this->name.$this->_startpage.value=\"$startpage\";document.$this->name.$this->_currentpage.value=\"$currentpage\";
-                                        document.$this->name.$this->_endpage.value=\"$endpage\";document.frmPage.action=\"$formlistname?pr=".$_SESSION['pr']."\";document.$this->name.submit();'>&nbsp;<B><font color='000000' style='text-decoration:underline'>$pagenumber</font></B>&nbsp;</a></li>";
+                                        document.$this->name.$this->_endpage.value=\"$endpage\";document.frmPage.action=\"$formlistname?objectid=".$_SESSION['objectid']."\";document.$this->name.submit();'>&nbsp;<B><font color='000000' style='text-decoration:underline'>$pagenumber</font></B>&nbsp;</a></li>";
 
                         }else{
                           echo "<li class='$class'><a href='#' onclick='javascript:document.$this->name.$this->_startrow.value=\"$start\";
                                         document.$this->name.$this->_startpage.value=\"$startpage\";document.$this->name.$this->_currentpage.value=\"$currentpage\";
-                                        document.$this->name.$this->_endpage.value=\"$endpage\";document.frmPage.action=\"$formlistname?pr=".$_SESSION['pr']."\";document.$this->name.submit();'>&nbsp;$startfrom&nbsp;</a></li>";
+                                        document.$this->name.$this->_endpage.value=\"$endpage\";document.frmPage.action=\"$formlistname?objectid=".$_SESSION['objectid']."\";document.$this->name.submit();'>&nbsp;$startfrom&nbsp;</a></li>";
 
                         }
                       }
@@ -689,7 +690,7 @@ class MyPHPGrid
 
                        echo "<li><a href='#'  onclick='javascript:document.$this->name.$this->_startrow.value=\"$start\";
                                         document.$this->name.$this->_startpage.value=\"$lstartpage\";document.$this->name.$this->_currentpage.value=\"$lcurrentpage\";
-                                        document.$this->name.$this->_endpage.value=\"$lendpage\";document.frmPage.action=\"$formlistname?pr=".$_SESSION['pr']."\";document.$this->name.submit();'><span aria-hidden='true'>&raquo;</span></a></li>";
+                                        document.$this->name.$this->_endpage.value=\"$lendpage\";document.frmPage.action=\"$formlistname?objectid=".$_SESSION['objectid']."\";document.$this->name.submit();'><span aria-hidden='true'>&raquo;</span></a></li>";
                 }
 
                 echo "</ul>";
