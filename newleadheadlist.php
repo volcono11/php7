@@ -13,23 +13,25 @@ $_SESSION['pr'] = isset($pagerights) ? $pagerights : '';
 
 $cmb_lookuplist = "";
 $cmb_lookuplist1 = "";
-//print_r($_REQUEST);
-if(isset($_REQUEST["ps"])){
-    if($_REQUEST['ps'] == "1") {
-    	$cmb_lookuplist1 = "Select";
-   		$cmb_lookuplist = "Current Status";
 
-	}
+
+$d_sql = "select companycode,companyname,count(*) as count from tbl_companysetup group by companycode";
+$d_res = mysqli_query($con,$d_sql) or die(mysqli_error($con)."<br>".$d_sql);
+$dash_board ="";
+$colors = array('bg-aqua','bg-green','bg-blue');
+$i=0;
+while($d_arr = mysqli_fetch_array($d_res)){
+	$dash_board .= "<button type='button' class='btn ".$colors[$i]."' onclick=javscript:refreshPaging2('newleadheadlist.php?objectid=".$_SESSION['objectid']."&companycode=".$d_arr['companycode']."');>  ".$d_arr['companyname']." <span class='badge'>".$d_arr['count']."</span></button>&nbsp;";
+	
+	$i++;
 }
-	else{
-		if(isset($_REQUEST["cmb_lookuplist"]))
-		$cmb_lookuplist = $_REQUEST["cmb_lookuplist"];
-		if(isset($_REQUEST["cmb_lookuplist1"]))
-		$cmb_lookuplist1 = $_REQUEST["cmb_lookuplist1"];
-	}
-    
 
+// top combo setup
+$cmb_lookuplist = isset($_REQUEST['cmb_lookuplist']) ? $_REQUEST['cmb_lookuplist'] : 'Current Status';
+$d_companycode = isset($_REQUEST['companycode']) ? $_REQUEST['companycode'] : '';
+$cmb_lookuplist1 = isset($_REQUEST['cmb_lookuplist1']) ? $_REQUEST['cmb_lookuplist1'] : 'Select';
 
+// print_r($_REQUEST);   
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
@@ -62,14 +64,13 @@ if(isset($_REQUEST["ps"])){
         <script src="js/alertify.min.js"></script>
 
 </head>
-
-
-
-
 <body class="hold-transition sidebar-mini">
 <section class='content-header' style='margin-top:10px;'>
 <h2 class='title'>AMC ENQUIRY</h2>
 </section>
+<!--<pre>
+<?php echo $dash_board;?>
+</pre>-->
 <?php
 	if($cmb_lookuplist1 != "") {
 	  $_SESSION['lookcode1'] = $cmb_lookuplist1;
@@ -268,11 +269,6 @@ if(isset($_REQUEST["ps"])){
                       alwaysVisible: true
 
                     });
-
-
                 }
-
-
-
 
 </script>

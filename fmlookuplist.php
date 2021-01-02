@@ -208,25 +208,20 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
                             <thead>
                              <tr bgcolor='#438EB9'>
                               <th style='width:20%;border-right:1px solid #ccc;cursor: pointer;'><font style='color:#fff'>Look Code</font></th>
+                              <th style='width:20%;border-right:1px solid #ccc;cursor: pointer;'><font style='color:#fff'>Short Name</font></th>
                               <th style='width:60%;border-right:1px solid #ccc;cursor: pointer;'><font style='color:#fff'>Look Type</font></th>
                               <th style='width:20%;border-right:1px solid #ccc;'><font style='color:#fff'>Action</font></th>
                              </tr>
                              ";
          if($CHILDID==''){
          	$looktype= $_SESSION['lookcode'];
-                 $SQL = " Select lookcode from in_lookup_fmcrm where looktype='".$looktype."' and lookname='XX'";
-	             $SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
-	             while($loginResultArray   = mysqli_fetch_array($SQLRes)){
-	                   $looktypeid =$loginResultArray['lookcode'];
-	             }
-	             
                  
              	$SQL = " Select lookcode from in_lookup_fmcrm where looktype='".$looktype."' and lookname='XX'";
              	$SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
              	while($loginResultArray   = mysqli_fetch_array($SQLRes)){
                    $looktypeid =$loginResultArray['lookcode'];
              	}
-               $lookcode ="";
+               $lookcode = $shortname = "";
                if($looktype!="")
                $lookcode =GetLastSqeIDlookcode('lookcode',$looktype,$looktypeid);
                
@@ -235,6 +230,7 @@ $entrydata = "<form name='frmEdit' id='frmEdit'  method='post'>
             if($insert == "true" && $_SESSION['lookcode']!="" && $CHILDID=="")  //add new   
             $entrydata .= " <tr id='tradd' name='tradd'>
                              <td style='border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' disabled id='txt_A_lookcode' name='txt_A_lookcode' onkeypress='return AllowNumeric1(event)'  value='$lookcode'/></td>
+                             <td style='border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' id='txt_A_shortname' name='txt_A_shortname' value='$shortname'/></td>
                              <td style='border: 1px solid #ccc;'><input type='text' class='form-control txt inputs' id='txt_A_lookname' name='txt_A_lookname'  value='' /></td>
                              <td style='border: 1px solid #ccc;'> <a href ='javascript:editingrecord();'  border='0' ><img src='ico/add-1-icon.png' title='New Entry' width='20' height='20'></a>&nbsp;
                              &nbsp;&nbsp;&nbsp;&nbsp;<a href ='javascript:Hideitem();'  border='0' ><img src='ico/cancel.png' title='Save Entry' width='18' height='18'></a>
@@ -355,29 +351,9 @@ $(function(){
   });
 });
 </script>
-<script>
-      $(document).ready(function()  {
-        $("#txt_A_stock").blur(function()  {
-          $("#txt_A_opstock").val($("#txt_A_stock").val());
-        });
-      });
-</script>
-<?php
-function GetStore($year){
-         $CMB .= "<span style='margin-top:5px;float:left'>Store Name :&nbsp;&nbsp;</span>";
-         $CMB .= "<select name='cmb_A_projectstore' class='form-control select' id='cmb_A_projectstore' style='padding-left:5px;padding-right:5px;margin-top:1px;width:50%;'  onchange='javascript:refreshrecord();'>";
-         $CMB .= "<option value=''>Select</option>";
-         $SEL =  "select name from in_store order by id";
-         $RES = mysqli_query($con,$SEL);
-         while ($ARR = mysqli_fetch_array($RES)) {
-                $SEL = "";
-                if(strtoupper($year) == strtoupper($ARR['name'])){ $SEL =  "SELECTED";}
-                $CMB .= "<option value='".$ARR['name']."' $SEL >".$ARR['name']."</option>";
-         }
-         $CMB .= "</select>";
-         return $CMB;
 
-}
+<?php
+
 
 ?>
 <script>
@@ -391,27 +367,21 @@ $("#sortTable").tablesorter();
 }
 );
 
-function newrecord(){
-             var tradd=document.getElementById('tradd');
-             tradd.style.display="table-row";
-             document.getElementById('txt_A_name').value='';
-             document.getElementById('txt_A_price').value='';
-}
 function refreshrecord(){
            var childid='';
-           document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&CHILDID='+childid+'&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookuplist.php?objectid=<?php echo $_SESSION["objectid"];?>&CHILDID='+childid+'&mysearch='+document.getElementById('mysearch').value+'&page='+<?php echo $page; ?>;
            document.frmEdit.submit();
 }
 function updaterecord(childid){
 	//document.getElementById('tradd').style.display = 'none'; 
-    document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&mysearch='+document.getElementById('mysearch').value+'&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+    document.frmEdit.action='fmlookuplist.php?objectid=<?php echo $_SESSION["objectid"];?>&mysearch='+document.getElementById('mysearch').value+'&CHILDID='+childid+'&page='+<?php echo $page; ?>;
    document.frmEdit.submit();
 }
 function deleterecord(childid){
 
         alertify.confirm("Are you sure you want to delete ?", function (e) {
          if (e) {
-           document.frmEdit.action='fmlookuplist.php?pr=<?php echo $pr;?>&DEL=DELETE&CHILDID='+childid+'&page='+<?php echo $page; ?>;
+           document.frmEdit.action='fmlookuplist.php?objectid=<?php echo $_SESSION["objectid"];?>&DEL=DELETE&CHILDID='+childid+'&page='+<?php echo $page; ?>;
            alertify.error("Record Deleted");
            window.setTimeout(function() { document.frmEdit.submit(); }, 800);
          } else {

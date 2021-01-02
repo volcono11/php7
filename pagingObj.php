@@ -760,6 +760,7 @@ function checksuserid($con,$id){
 
              $SQL = "Select suserid from in_crmhead where id ='$id'";
              $SQLRes =  mysqli_query($con,$SQL) or die(mysqli_error()."<br>".$SQL);
+             $sco = "";
              while($loginResultArray   = mysqli_fetch_array($SQLRes)){
                    $sco = $loginResultArray['suserid'];
              }
